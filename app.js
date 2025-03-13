@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-import { getDatabase, ref, push, onValue, remove } from
-"https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 const firebaseConfig = {
 apiKey: "AIzaSyBEmRheNCEiRGcLOJBb8FoaEYmrdaGYKv0",
 authDomain: "signup-login-form-754b4.firebaseapp.com",
