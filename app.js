@@ -12,37 +12,36 @@ const firebaseConfig = {
     measurementId: "G-3SJG6WDSXF"
   };
 
-  // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const analytics = getAnalytics(app);
-const taskInput = document.getElementById("taskInput");
-const taskList = document.getElementById("taskList");
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-// ✅ Add Task
-window.addTask = () => {
-    let task = taskInput.value.trim();
-    if (task) push(ref(db, "tasks"), task);
-    taskInput.value = "";
-};
+// Get references to HTML elements
+const todoInput = document.getElementById('todo-input');
+const addTodoBtn = document.getElementById('add-todo-btn');
+const todoList = document.getElementById('todo-list');
 
-// ✅ Load Tasks
-onValue(ref(db, "tasks"), (snapshot) => {
-    taskList.innerHTML = "";
-    let tasks = snapshot.val();
-    if (!tasks) return;
+// Add todo item to Firebase Realtime Database
+addTodoBtn.addEventListener('click', () => {
+  let todoText = todoInput.value.trim();
+  if (todoText) {
+    set(ref(db, 'todos'), { text: todoText });
+    todoInput.value = '';
+  }
+});
 
-    let keys = Object.keys(tasks);
-    for (let i = 0; i < keys.length; i++) {
-        let key = keys[i];
-        let li = document.createElement("li");
-        let btn = document.createElement("button");
-
-        li.textContent = tasks[key];
-        btn.textContent = "Delete";
-        btn.onclick = () => remove(ref(db, "tasks/" + key));
-
-        li.appendChild(btn);
-        taskList.appendChild(li);
+// Display todo items from Firebase Realtime Database
+onValue(ref(db, 'todos'), (snapshot) => {
+  todoList.innerHTML = '';
+  const todoText = snapshot.val().text;
+  const li = document.createElement('li');
+  li.textContent = todoText;
+  const deleteBtn = document.createElement('button');
+  deleteBtn.textContent = 'Delete';
+  deleteBtn.addEventListener('click', () => {
+    if (confirm('Are you sure you want to delete this todo item?')) {
+      remove(ref(db, 'todos'));
     }
+  });
+  li.appendChild(deleteBtn);
+  todoList.appendChild(li);
 });
